@@ -4,10 +4,10 @@ access_key = "AKIAWVZMPXJHALEPQHGB"
 secret_key = "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"
 }
 
-
 variable "privatekey" {
   default = "test-key.pem"
 }
+
 resource "aws_security_group" "allow_tls12" {
   name        = "allow_tls12"
   vpc_id      = "vpc-0c531ece6579c3e24"
