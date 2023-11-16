@@ -1,0 +1,45 @@
+---
+- hosts : all
+  user : ec2-user
+  become : yes
+  vars:
+    a:
+      - git
+      - maven
+  tasks:
+    - name: git & maven installation
+      yum:
+        name: "{{a}}"
+        state: present
+
+    - name: Create a Tomcat Directory
+      file:
+        path: /opt/tomcat
+        state: directory
+
+    - name: tomcat installation
+      unarchive:
+        src: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.83/bin/apache-tomcat-9.0.83.tar.gz
+        dest: /opt/tomcat
+        remote_src: yes
+        extra_opts: [--strip-components=1]
+
+    - name: Clone a git repo
+      git:
+        repo: https://github.com/Lahari-Bitla/pet_shop.git
+        dest: /git_repo
+        clone: yes
+        update: yes
+
+    - name: maven build
+      command: mvn -f /git_repo/pom.xml clean package
+
+    - name: deploy
+      copy:
+        src: /git_repo/target/petshop.war
+        dest: /opt/tomcat/webapps/test.war
+        remote_src: yes
+    - name: start tomcat
+      command: "nohup /opt/tomcat/bin/startup.sh"
+
+
