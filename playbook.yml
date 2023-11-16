@@ -1,6 +1,6 @@
 ---
 - hosts : all                                                                                     #ip add of node servers
-  user : ec2-user
+  user : root
   become : yes                                                                                    #permission to login through any user
   vars:
     a:
