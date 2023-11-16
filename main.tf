@@ -67,7 +67,7 @@ resource "aws_instance" "web" {                                 #instance creati
 
    provisioner "local-exec" {                                   #The local-exec provisioner invokes a local executable after a resource is created.
     command = "ansible-playbook -i ${aws_instance.web.public_ip}, --private-key ${var.privatekey} playbook.yml"
-  }                                                             #ansible command to run playbook
-}
+  }                                                             #ansible command to run playbook 
+}                                                               #commands executes in node servers
 
 
