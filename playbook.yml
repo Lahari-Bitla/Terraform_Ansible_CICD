@@ -1,45 +1,45 @@
 ---
-- hosts : all
+- hosts : all                                                                                     #ip add of node servers
   user : ec2-user
-  become : yes
+  become : yes                                                                                    #permission to login through any user
   vars:
     a:
       - git
       - maven
   tasks:
-    - name: git & maven installation
+    - name: git & maven installation                                                              #installing git and maven 
       yum:
         name: "{{a}}"
         state: present
 
-    - name: Create a Tomcat Directory
+    - name: Create a Tomcat Directory                                                             #creates a directory named tomcat
       file:
         path: /opt/tomcat
         state: directory
 
     - name: tomcat installation
-      unarchive:
-        src: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.83/bin/apache-tomcat-9.0.83.tar.gz
-        dest: /opt/tomcat
-        remote_src: yes
-        extra_opts: [--strip-components=1]
+      unarchive:                                                                                  #to extract the tomcat downloaded file
+        src: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.83/bin/apache-tomcat-9.0.83.tar.gz     #tomcat download file
+        dest: /opt/tomcat                                                                         #to extract the file in tomcat directory
+        remote_src: yes                                                                           #in remote source
+        extra_opts: [--strip-components=1]                                                        #exclude the subdirectory
 
-    - name: Clone a git repo
+    - name: Clone a git repo                                                                      #cloning a git repository from github
       git:
         repo: https://github.com/Lahari-Bitla/pet_shop.git
         dest: /git_repo
         clone: yes
         update: yes
 
-    - name: maven build
+    - name: maven build                                                                           #to build the git repo --> war file is generated
       command: mvn -f /git_repo/pom.xml clean package
 
-    - name: deploy
+    - name: deploy                                                                                #deploying the war file in server
       copy:
         src: /git_repo/target/petshop.war
         dest: /opt/tomcat/webapps/test.war
         remote_src: yes
-    - name: start tomcat
+    - name: start tomcat                                                                          #starting a tomcat in server            
       command: "nohup /opt/tomcat/bin/startup.sh"
 
 
