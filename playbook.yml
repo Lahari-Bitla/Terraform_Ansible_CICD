@@ -1,6 +1,6 @@
 ---
 - hosts : all                                                                                     #ip add of node servers
-  user : root
+  user : root                                                                                     #ec2-user for terraform and root for jenkins
   become : yes                                                                                    #permission to login through any user
   vars:
     a:
